@@ -5,6 +5,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -12,6 +13,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor // generate an empty constructor, necessary for using @Entity (JPA pattern)
 @Entity // specifies that this class maps to a db table
+@Builder
 public class Anime {
     @Id // specifies that id is used as primary key
     @GeneratedValue(strategy = GenerationType.IDENTITY)

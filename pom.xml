@@ -9,7 +9,7 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.diego.projetos</groupId>
-	<artifactId>springboot2-essentials</artifactId>
+	<artifactId>springboot-studies</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name/>
 	<description/>

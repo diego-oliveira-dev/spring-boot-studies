@@ -1,4 +1,4 @@
-package com.diego.projetos.springboot2_essentials.util;
+package com.diego.projetos.springboot_studies.util;
 
 import org.springframework.stereotype.Component;
 

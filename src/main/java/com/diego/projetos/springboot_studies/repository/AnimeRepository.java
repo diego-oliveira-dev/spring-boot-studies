@@ -1,6 +1,6 @@
-package com.diego.projetos.springboot2_essentials.repository;
+package com.diego.projetos.springboot_studies.repository;
 
-import com.diego.projetos.springboot2_essentials.domain.Anime;
+import com.diego.projetos.springboot_studies.domain.Anime;
 
 import java.util.List;
 

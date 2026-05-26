@@ -1,4 +1,4 @@
-package com.diego.projetos.springboot2_essentials;
+package com.diego.projetos.springboot_studies;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

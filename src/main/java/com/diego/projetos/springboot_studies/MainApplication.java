@@ -1,4 +1,4 @@
-package com.diego.projetos.springboot2_essentials;
+package com.diego.projetos.springboot_studies;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

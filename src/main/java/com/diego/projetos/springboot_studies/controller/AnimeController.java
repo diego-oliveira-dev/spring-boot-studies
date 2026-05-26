@@ -1,8 +1,8 @@
-package com.diego.projetos.springboot2_essentials.controller;
+package com.diego.projetos.springboot_studies.controller;
 
-import com.diego.projetos.springboot2_essentials.domain.Anime;
-import com.diego.projetos.springboot2_essentials.service.AnimeService;
-import com.diego.projetos.springboot2_essentials.util.DateUtil;
+import com.diego.projetos.springboot_studies.domain.Anime;
+import com.diego.projetos.springboot_studies.service.AnimeService;
+import com.diego.projetos.springboot_studies.util.DateUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpStatus;

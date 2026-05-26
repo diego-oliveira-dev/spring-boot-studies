@@ -1,6 +1,6 @@
-package com.diego.projetos.springboot2_essentials.service;
+package com.diego.projetos.springboot_studies.service;
 
-import com.diego.projetos.springboot2_essentials.domain.Anime;
+import com.diego.projetos.springboot_studies.domain.Anime;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;

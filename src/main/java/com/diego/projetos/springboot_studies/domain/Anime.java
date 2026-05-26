@@ -1,4 +1,4 @@
-package com.diego.projetos.springboot2_essentials.domain;
+package com.diego.projetos.springboot_studies.domain;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

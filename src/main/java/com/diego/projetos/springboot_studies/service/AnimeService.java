@@ -1,6 +1,7 @@
 package com.diego.projetos.springboot_studies.service;
 
 import com.diego.projetos.springboot_studies.domain.Anime;
+import com.diego.projetos.springboot_studies.exception.BadRequestException;
 import com.diego.projetos.springboot_studies.mapper.AnimeMapper;
 import com.diego.projetos.springboot_studies.repository.AnimeRepository;
 import com.diego.projetos.springboot_studies.requests.AnimePostRequestBody;
@@ -27,7 +28,7 @@ public class AnimeService {
 
     public Anime findByIdOrThrowBadRequestException(long id) {
         return animeRepository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Anime not found"));
+                .orElseThrow(() -> new BadRequestException("Anime not found"));
     }
 
     public Anime save(AnimePostRequestBody animePostRequestBody) {

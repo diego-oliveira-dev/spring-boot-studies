@@ -36,6 +36,16 @@ public class AnimeController {
         return ResponseEntity.ok(animeService.findByIdOrThrowBadRequestException(id));
     }
 
+    @GetMapping("/find")
+    public ResponseEntity<List<Anime>> findByName(@RequestParam String name) {
+        return ResponseEntity.ok(animeService.findByName(name));
+        // @RequestParam args:
+        // - (name = "name") -> not mandatory since Spring uses the method parameter
+        // - (default = ...) -> modify the default value of the method parameter
+        // - (required = true/false) -> "should the parameter be required to make this request?"
+        // *** obs: you can use multiple @RequestParam in one method
+    }
+
     @PostMapping
 //    @ResponseStatus(HttpStatus.CREATED) -> another way
     public ResponseEntity<Anime> save(@RequestBody AnimePostRequestBody animePostRequestBody) {

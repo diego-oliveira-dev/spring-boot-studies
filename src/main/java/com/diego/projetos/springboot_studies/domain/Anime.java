@@ -1,9 +1,6 @@
 package com.diego.projetos.springboot_studies.domain;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -20,9 +17,16 @@ public class Anime {
     // used alongside @Id to make id auto-generated
     // search for generation types later
     private Long id;
+
+    // how to make a field not nullable (or add any kind of validation):
+    // 1st way: using @Column(nullable = false), but this way only works for
+    // future POSTs, and it doesn't update the database
+    // 2nd way: using Spring Boot Validation Dependency. Since you're not using
+    // directly this class in Controller layer, you must add @NotNull and/or
+    // @NotEmpty to your DTOs
     private String name;
-//    @JsonProperty("name")
-//    private String animeName;
-//    This way, Jackson maps 'animeName' as 'name'
+    // @JsonProperty("name")
+    // private String animeName;
+    // This way, Jackson maps 'animeName' as 'name'
 
 }

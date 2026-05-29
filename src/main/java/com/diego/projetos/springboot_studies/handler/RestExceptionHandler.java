@@ -18,14 +18,14 @@ public class RestExceptionHandler {
 
     @ExceptionHandler(BadRequestException.class)
     public ResponseEntity<BadRequestExceptionDetails>
-            badRequestExceptionHandler(BadRequestException badRequestException) {
+            badRequestExceptionHandler(BadRequestException exception) {
         return new ResponseEntity<>(
                 BadRequestExceptionDetails.builder()
                         .timestamp(LocalDateTime.now())
                         .status(HttpStatus.BAD_REQUEST.value())
                         .title("Bad Request Exception. Check the Documentation")
-                        .details(badRequestException.getMessage())
-                        .developerMessage(badRequestException.getClass().getName())
+                        .details(exception.getMessage())
+                        .developerMessage(exception.getClass().getName())
                         .build(), HttpStatus.BAD_REQUEST
         );
     }

@@ -1,4 +1,4 @@
-package com.diego.projetos.springboot_studies.controller;
+package com.diego.projetos.springboot_studies.handler;
 
 import com.diego.projetos.springboot_studies.exception.BadRequestException;
 import com.diego.projetos.springboot_studies.exception.BadRequestExceptionDetails;

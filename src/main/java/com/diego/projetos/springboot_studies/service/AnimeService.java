@@ -2,7 +2,6 @@ package com.diego.projetos.springboot_studies.service;
 
 import com.diego.projetos.springboot_studies.domain.Anime;
 import com.diego.projetos.springboot_studies.exception.BadRequestException;
-import com.diego.projetos.springboot_studies.mapper.AnimeMapper;
 import com.diego.projetos.springboot_studies.repository.AnimeRepository;
 import com.diego.projetos.springboot_studies.requests.AnimePostRequestBody;
 import com.diego.projetos.springboot_studies.requests.AnimePutRequestBody;
@@ -31,11 +30,12 @@ public class AnimeService {
 
     public Anime save(AnimePostRequestBody animePostRequestBody) {
         // without using mapping framework (hands-on):
-        // Anime anime = Anime.builder().name(animePostRequestBody.getName()).build();
-        // return animeRepository.save(anime); -> default return of 'save' is the updated object
+        // default return of 'save' is the updated object
+        Anime anime = Anime.builder().name(animePostRequestBody.getName()).build();
+        return animeRepository.save(anime);
 
         // using mapping framework (MapStruct):
-        return animeRepository.save(AnimeMapper.INSTANCE.toAnime(animePostRequestBody));
+        // return animeRepository.save(AnimeMapper.INSTANCE.toAnime(animePostRequestBody));
     }
 
     public void delete(long id) {
@@ -48,11 +48,12 @@ public class AnimeService {
     public void replace(AnimePutRequestBody animePutRequestBody) {
         Anime savedAnime = findByIdOrThrowBadRequestException(animePutRequestBody.getId());
         // without mapping framework:
-        // Anime anime = Anime.builder().id(savedAnime.getId()).name(animePutRequestBody.getName()).build();
+        Anime anime = Anime.builder().id(savedAnime.getId()).name(animePutRequestBody.getName()).build();
+        animeRepository.save(anime); // by itself, does not check if the anime in fact exists
 
         // using mapping framework:
-        Anime anime = AnimeMapper.INSTANCE.toAnime(animePutRequestBody);
-        anime.setId(savedAnime.getId());
-        animeRepository.save(anime); // by itself, does not check if the anime in fact exists
+        // Anime anime = AnimeMapper.INSTANCE.toAnime(animePutRequestBody);
+        // anime.setId(savedAnime.getId());
+        // animeRepository.save(anime);
     }
 }

@@ -7,6 +7,7 @@ import com.diego.projetos.springboot_studies.requests.AnimePostRequestBody;
 import com.diego.projetos.springboot_studies.requests.AnimePutRequestBody;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -28,6 +29,7 @@ public class AnimeService {
                 .orElseThrow(() -> new BadRequestException("Anime not found"));
     }
 
+    @Transactional
     public Anime save(AnimePostRequestBody animePostRequestBody) {
         // without using mapping framework (hands-on):
         // default return of 'save' is the updated object
@@ -45,10 +47,14 @@ public class AnimeService {
     // Non-Idempotent Methods (POST, PATCH)
     // and Idempotent Methods(GET, PUT, DELETE)
 
+
     public void replace(AnimePutRequestBody animePutRequestBody) {
         Anime savedAnime = findByIdOrThrowBadRequestException(animePutRequestBody.getId());
         // without mapping framework:
-        Anime anime = Anime.builder().id(savedAnime.getId()).name(animePutRequestBody.getName()).build();
+        Anime anime = Anime.builder()
+                .id(savedAnime.getId())
+                .name(animePutRequestBody.getName())
+                .build();
         animeRepository.save(anime); // by itself, does not check if the anime in fact exists
 
         // using mapping framework:

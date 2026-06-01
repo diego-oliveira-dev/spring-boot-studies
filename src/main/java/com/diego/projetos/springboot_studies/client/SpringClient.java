@@ -28,7 +28,6 @@ public class SpringClient {
         // casting to List can be very problematic too
 
         // so an alternative would be:
-
         ResponseEntity<List<Anime>> exchange = new RestTemplate().exchange(
                 "http://localhost:8080/animes/all", HttpMethod.GET, null,
                 new ParameterizedTypeReference<>() {
@@ -47,10 +46,30 @@ public class SpringClient {
         Anime secondAnimeToBePosted = Anime.builder().name("Grand Blue").build();
         ResponseEntity<Anime> savedSecondAnime = new RestTemplate().exchange("http://localhost:8080/animes",
                 HttpMethod.POST,
-                // exchange can stand out because it can send HTTP headers inside HttpEntity, as showed below
-                new HttpEntity<>(secondAnimeToBePosted, createJsonHeader() ),
+                // exchange stands out because it can send HTTP headers inside HttpEntity, as showed below
+                new HttpEntity<>(secondAnimeToBePosted, createJsonHeader()),
                 Anime.class);
         log.info("Posted second anime: {}", savedSecondAnime);
+
+        // PUT and DELETE return void. It isn't bad per se, but you become unaware of the changes that you made
+        // so for these methods, I'll use solely the exchange method, although you could use the 'singular' methods
+
+        // RestTemplate PUT method
+        Anime animeToBeUpdated = savedSecondAnime.getBody();
+        animeToBeUpdated.setName("Grand Blue 2");
+        ResponseEntity<Void> updatedSecondAnime = new RestTemplate().exchange("http://localhost:8080/animes",
+                HttpMethod.PUT,
+                new HttpEntity<>(animeToBeUpdated, createJsonHeader()),
+                Void.class);
+        log.info("Updated anime. New name: {}", updatedSecondAnime);
+
+        // RestTemplate DELETE method
+        ResponseEntity<Void> deletedSecondAnime = new RestTemplate().exchange("http://localhost:8080/animes/{id}",
+                HttpMethod.DELETE,
+                null,
+                Void.class,
+                animeToBeUpdated.getId());
+        log.info(deletedSecondAnime);
     }
 
     private static HttpHeaders createJsonHeader() {

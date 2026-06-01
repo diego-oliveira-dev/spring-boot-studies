@@ -41,27 +41,33 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
         );
     }
 
-    @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<ValidationExceptionDetails>
-    handleMethodArgumentNotValidException(MethodArgumentNotValidException exception) {
+    @Override
+    protected ResponseEntity<Object> handleMethodArgumentNotValid(
+            MethodArgumentNotValidException exception, HttpHeaders headers,
+            HttpStatusCode statusCode, WebRequest request) {
+
         List<FieldError> fieldErrors = exception.getBindingResult().getFieldErrors();
+
         String fields = fieldErrors.stream()
                 .map(FieldError::getField)
-                .collect(Collectors.joining(","));
-        String fieldMessage = fieldErrors.stream()
-                .map(FieldError::getDefaultMessage)
-                .collect(Collectors.joining(","));
+                .collect(Collectors.joining(", "));
 
-        return new ResponseEntity<>(
+        String fieldsMessage = fieldErrors.stream()
+                .map(FieldError::getDefaultMessage)
+                .collect(Collectors.joining(", "));
+
+        ValidationExceptionDetails details =
                 ValidationExceptionDetails.builder()
                         .timestamp(LocalDateTime.now())
-                        .status(HttpStatus.BAD_REQUEST.value())
+                        .status(statusCode.value())
                         .title("Bad Request Exception. Invalid Fields.")
                         .details("fields error: " + exception.getMessage())
                         .developerMessage(exception.getClass().getName())
                         .fields(fields)
-                        .fieldsMessage(fieldMessage)
-                        .build(), HttpStatus.BAD_REQUEST);
+                        .fieldsMessage(fieldsMessage)
+                        .build();
+
+        return new ResponseEntity<>(details, headers, statusCode);
     }
 
     @Override
@@ -70,13 +76,15 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
                                                              HttpHeaders headers,
                                                              HttpStatusCode statusCode,
                                                              WebRequest request) {
+
         ExceptionDetails exceptionDetails = ExceptionDetails.builder()
                 .timestamp(LocalDateTime.now())
                 .status(statusCode.value())
-                .title(ex.getCause().getMessage())
+                .title(ex.getMessage())
                 .details(ex.getMessage())
                 .developerMessage(ex.getClass().getName())
                 .build();
+
         return new ResponseEntity<>(exceptionDetails, headers, statusCode);
     }
 }

@@ -29,11 +29,13 @@ public class AnimeController {
     //localhost:8080/
     @GetMapping
     public ResponseEntity<Page<Anime>> list(Pageable pageable) {
-//        log.info(dateUtil.formatLocalDateTimeToDatabaseStyle(LocalDateTime.now()));
-//        return new ResponseEntity<>(animeService.listAll(), HttpStatus.OK); -> another way
-        log.info("Page: {}", pageable.getPageNumber());
-        log.info("Size: {}", pageable.getPageSize());
         return ResponseEntity.ok(animeService.listAll(pageable));
+    }
+
+    @GetMapping("/all")
+    public ResponseEntity<List<Anime>> listAll() {
+//        return new ResponseEntity<>(animeService.listAll(), HttpStatus.OK); -> another way
+        return ResponseEntity.ok(animeService.listAllNonPageable());
     }
 
     @GetMapping("/{id}")

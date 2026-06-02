@@ -18,6 +18,8 @@ spring:
         max-page-size: 100
 
 logging:
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss.SSS} [%-5level] %logger : %msg%n"
   level:
     org:
       hibernate:

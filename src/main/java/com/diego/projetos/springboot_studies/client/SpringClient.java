@@ -51,8 +51,8 @@ public class SpringClient {
                 Anime.class);
         log.info("Posted second anime: {}", savedSecondAnime);
 
-        // PUT and DELETE return void. It isn't bad per se, but you become unaware of the changes that you made
-        // so for these methods, I'll use solely the exchange method, although you could use the 'singular' methods
+        // PUT and DELETE return void. It isn't bad per se, but you become unaware of the changes that you made.
+        // So for these methods, I'll use solely the exchange method, although you could use the 'singular' methods
 
         // RestTemplate PUT method
         Anime animeToBeUpdated = savedSecondAnime.getBody();

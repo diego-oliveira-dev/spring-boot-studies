@@ -1,6 +1,7 @@
 package com.diego.projetos.springboot_studies.repository;
 
 import com.diego.projetos.springboot_studies.domain.Anime;
+import com.diego.projetos.springboot_studies.util.AnimeCreator;
 import jakarta.validation.ConstraintViolationException;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -22,7 +23,7 @@ class AnimeRepositoryTest {
     @Test
     @DisplayName("Save persists anime when successful")
     void save_PersistAnime_WhenSuccessful() {
-        Anime animeToBeSaved = createAnime();
+        Anime animeToBeSaved = AnimeCreator.createAnimeToBeSaved();
         Anime savedAnime = this.animeRepository.save(animeToBeSaved);
 
         Assertions.assertThat(savedAnime).isNotNull();
@@ -33,7 +34,7 @@ class AnimeRepositoryTest {
     @Test
     @DisplayName("Save updates anime when successful")
     void save_UpdatesAnime_WhenSuccessful() {
-        Anime animeToBeSaved = createAnime();
+        Anime animeToBeSaved = AnimeCreator.createAnimeToBeSaved();
         Anime savedAnime = this.animeRepository.save(animeToBeSaved);
         savedAnime.setName("Overlord");
         Anime updatedAnime = this.animeRepository.save(savedAnime);
@@ -46,7 +47,7 @@ class AnimeRepositoryTest {
     @Test
     @DisplayName("Delete removes anime when successful")
     void delete_RemovesAnime_WhenSuccessful() {
-        Anime animeToBeSaved = createAnime();
+        Anime animeToBeSaved = AnimeCreator.createAnimeToBeSaved();
         Anime savedAnime = this.animeRepository.save(animeToBeSaved);
         this.animeRepository.delete(savedAnime);
         Optional<Anime> optionalAnime = this.animeRepository.findById(savedAnime.getId());
@@ -57,7 +58,7 @@ class AnimeRepositoryTest {
     @Test
     @DisplayName("Find By Name returns list of anime when successful")
     void findByName_ReturnsListOfAnime_WhenSuccessful() {
-        Anime animeToBeSaved = createAnime();
+        Anime animeToBeSaved = AnimeCreator.createAnimeToBeSaved();
         Anime savedAnime = this.animeRepository.save(animeToBeSaved);
         List<Anime> animeList = this.animeRepository.findByName(savedAnime.getName());
 
@@ -85,11 +86,5 @@ class AnimeRepositoryTest {
         Assertions.assertThatExceptionOfType(ConstraintViolationException.class)
                 .isThrownBy(() -> this.animeRepository.save(anime))
                 .withMessageContaining("Anime name cannot be empty");
-    }
-
-    private Anime createAnime() {
-        return Anime.builder()
-                .name("Hajime no Ippo")
-                .build();
     }
 }

@@ -13,6 +13,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import java.util.Collections;
 import java.util.List;
 
 //@SpringBootTest -> not ideal for unit tests, since it starts the entire Spring Application
@@ -39,6 +40,9 @@ class AnimeControllerTest {
 
         BDDMockito.when(animeServiceMock.findByIdOrThrowBadRequestException(ArgumentMatchers.anyLong()))
                 .thenReturn(AnimeCreator.createValidAnime());
+
+        BDDMockito.when(animeServiceMock.findByName(ArgumentMatchers.anyString()))
+                .thenReturn(List.of(AnimeCreator.createValidAnime()));
     }
 
     @Test
@@ -48,11 +52,8 @@ class AnimeControllerTest {
         Page<Anime> animePage = animeController.list(null).getBody();
 
         Assertions.assertThat(animePage).isNotNull();
-        Assertions.assertThat(animePage.toList())
-                .isNotEmpty()
-                .hasSize(1);
-        Assertions.assertThat(animePage.toList().getFirst().getName())
-                .isEqualTo(expectedName);
+        Assertions.assertThat(animePage.toList()).isNotEmpty().hasSize(1);
+        Assertions.assertThat(animePage.toList().getFirst().getName()).isEqualTo(expectedName);
     }
 
     @Test
@@ -61,21 +62,38 @@ class AnimeControllerTest {
         String expectedName = AnimeCreator.createValidAnime().getName();
         List<Anime> animeList = animeController.listAll().getBody();
 
-        Assertions.assertThat(animeList)
-                .isNotNull()
-                .isNotEmpty()
-                .hasSize(1);
-        Assertions.assertThat(animeList.getFirst().getName())
-                .isEqualTo(expectedName);
+        Assertions.assertThat(animeList).isNotNull().isNotEmpty().hasSize(1);
+        Assertions.assertThat(animeList.getFirst().getName()).isEqualTo(expectedName);
     }
 
     @Test
     @DisplayName("findById returns anime when successful")
     void findById_ReturnsAnime_WhenSuccessful() {
         long expectedId = AnimeCreator.createValidAnime().getId();
-        Anime anime = animeController.findById(expectedId).getBody();
+        Anime anime = animeController.findById(3L).getBody();
 
         Assertions.assertThat(anime).isNotNull();
         Assertions.assertThat(anime.getId()).isNotNull().isEqualTo(expectedId);
+    }
+
+    @Test
+    @DisplayName("findByName returns anime list with similar names when successful")
+    void findByName_ReturnsAnimeListWithSimilarNames_WhenSuccessful() {
+        String name = AnimeCreator.createValidAnime().getName();
+        List<Anime> animeList = animeController.findByName("ashuasij").getBody();
+
+        Assertions.assertThat(animeList).isNotNull().isNotEmpty().hasSize(1);
+        Assertions.assertThat(animeList.getFirst().getName()).containsAnyOf(name);
+    }
+
+    @Test
+    @DisplayName("findByName returns empty list when anime is not found")
+    void findByName_ReturnsEmptyList_WhenAnimeIsNotFound() {
+        BDDMockito.when(animeServiceMock.findByName(ArgumentMatchers.anyString()))
+                .thenReturn(Collections.emptyList());
+
+        List<Anime> animeList = animeController.findByName("ashuasij").getBody();
+
+        Assertions.assertThat(animeList).isNotNull().isEmpty();
     }
 }

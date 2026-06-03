@@ -33,14 +33,16 @@ class AnimeControllerTest {
         PageImpl<Anime> animePage = new PageImpl<>(List.of(AnimeCreator.createValidAnime()));
         BDDMockito.when(animeServiceMock.listAll(ArgumentMatchers.any()))
                 .thenReturn(animePage);
-        // no matter the argument that this method is called, it'll return animePage
 
         BDDMockito.when(animeServiceMock.listAllNonPageable())
                 .thenReturn(List.of(AnimeCreator.createValidAnime()));
+
+        BDDMockito.when(animeServiceMock.findByIdOrThrowBadRequestException(ArgumentMatchers.anyLong()))
+                .thenReturn(AnimeCreator.createValidAnime());
     }
 
     @Test
-    @DisplayName("List returns list of animes inside page object when successful")
+    @DisplayName("list returns list of animes inside page object when successful")
     void list_ReturnsListOfAnimesInsidePageObject_WhenSuccessful() {
         String expectedName = AnimeCreator.createValidAnime().getName();
         Page<Anime> animePage = animeController.list(null).getBody();
@@ -54,7 +56,7 @@ class AnimeControllerTest {
     }
 
     @Test
-    @DisplayName("ListAll returns list of animes when successful")
+    @DisplayName("listAll returns list of animes when successful")
     void listAll_ReturnsListOfAnime_WhenSuccessful() {
         String expectedName = AnimeCreator.createValidAnime().getName();
         List<Anime> animeList = animeController.listAll().getBody();
@@ -65,5 +67,15 @@ class AnimeControllerTest {
                 .hasSize(1);
         Assertions.assertThat(animeList.getFirst().getName())
                 .isEqualTo(expectedName);
+    }
+
+    @Test
+    @DisplayName("findById returns anime when successful")
+    void findById_ReturnsAnime_WhenSuccessful() {
+        long expectedId = AnimeCreator.createValidAnime().getId();
+        Anime anime = animeController.findById(expectedId).getBody();
+
+        Assertions.assertThat(anime).isNotNull();
+        Assertions.assertThat(anime.getId()).isNotNull().isEqualTo(expectedId);
     }
 }

@@ -57,6 +57,8 @@ class AnimeControllerTest {
                 .thenReturn(AnimeCreator.createValidAnime());
 
         BDDMockito.doNothing().when(animeServiceMock).replace(ArgumentMatchers.any(AnimePutRequestBody.class));
+
+        BDDMockito.doNothing().when(animeServiceMock).delete(ArgumentMatchers.anyLong());
     }
 
     @Test
@@ -127,6 +129,19 @@ class AnimeControllerTest {
 
         Assertions.assertThatCode(
                 () -> animeController.replace(AnimePutRequestBodyCreator.createAnimePutRequestBody()))
+                .doesNotThrowAnyException();
+
+        Assertions.assertThat(entity).isNotNull();
+        Assertions.assertThat(entity.getStatusCode()).isEqualTo(HttpStatus.NO_CONTENT);
+    }
+
+    @Test
+    @DisplayName("delete removes anime when successful")
+    void delete_RemovesAnime_WhenSuccessful() {
+        ResponseEntity<Void> entity = animeController.delete(1L);
+
+        Assertions.assertThatCode(
+                () -> animeController.delete(1L))
                 .doesNotThrowAnyException();
 
         Assertions.assertThat(entity).isNotNull();

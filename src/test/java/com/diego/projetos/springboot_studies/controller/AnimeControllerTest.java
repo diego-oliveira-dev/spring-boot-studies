@@ -99,7 +99,7 @@ class AnimeControllerTest {
         List<Anime> animeList = animeController.findByName("ashuasij").getBody();
 
         Assertions.assertThat(animeList).isNotNull().isNotEmpty().hasSize(1);
-        Assertions.assertThat(animeList.getFirst().getName()).containsAnyOf(name);
+        Assertions.assertThat(animeList.getFirst().getName()).isEqualTo(name);
     }
 
     @Test

@@ -15,6 +15,8 @@ import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpMethod;
 
+import java.util.List;
+
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureTestDatabase
 public class AnimeControllerIT {
@@ -39,5 +41,19 @@ public class AnimeControllerIT {
         Assertions.assertThat(animePage).isNotNull();
         Assertions.assertThat(animePage.toList()).isNotEmpty().hasSize(1);
         Assertions.assertThat(animePage.toList().getFirst().getName()).isEqualTo(expectedName);
+    }
+
+    @Test
+    @DisplayName("listAll returns list of animes when successful")
+    void listAll_ReturnsListOfAnimes_WhenSuccessful() {
+        Anime savedAnime = animeRepository.save(AnimeCreator.createAnimeToBeSaved());
+        String expectedName = savedAnime.getName();
+
+        List<Anime> animeList = testRestTemplate.exchange("/animes/all", HttpMethod.GET, null,
+                new ParameterizedTypeReference<List<Anime>>() {
+                }).getBody();
+
+        Assertions.assertThat(animeList).isNotNull().isNotEmpty().hasSize(1);
+        Assertions.assertThat(animeList.getFirst().getName()).isEqualTo(expectedName);
     }
 }

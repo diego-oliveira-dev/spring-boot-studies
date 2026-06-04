@@ -101,4 +101,16 @@ public class AnimeControllerIT {
 
         Assertions.assertThat(animeList).isNotNull().isEmpty();
     }
+
+    @Test
+    @DisplayName("save returns anime when successful")
+    void save_ReturnsAnime_WhenSuccessful() {
+        AnimePostRequestBody animePostRequestBody = AnimePostRequestBodyCreator.createAnimePostRequestBody();
+        ResponseEntity<Anime> animeResponseEntity = testRestTemplate.postForEntity("/animes", animePostRequestBody, Anime.class);
+
+        Assertions.assertThat(animeResponseEntity).isNotNull();
+        Assertions.assertThat(animeResponseEntity.getStatusCode()).isEqualTo(HttpStatus.CREATED);
+        Assertions.assertThat(animeResponseEntity.getBody()).isNotNull();
+        Assertions.assertThat(animeResponseEntity.getBody().getId()).isNotNull();
+    }
 }

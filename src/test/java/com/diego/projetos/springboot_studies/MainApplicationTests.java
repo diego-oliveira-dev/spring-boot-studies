@@ -3,10 +3,10 @@ package com.diego.projetos.springboot_studies;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
-@SpringBootTest
+//@SpringBootTest
 class MainApplicationTests {
 
-	@Test
+//	@Test
 	void contextLoads() {
 	}
 

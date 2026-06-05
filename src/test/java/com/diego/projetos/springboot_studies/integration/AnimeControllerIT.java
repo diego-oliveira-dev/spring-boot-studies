@@ -7,7 +7,6 @@ import com.diego.projetos.springboot_studies.util.AnimeCreator;
 import com.diego.projetos.springboot_studies.util.AnimePostRequestBodyCreator;
 import com.diego.projetos.springboot_studies.wrapper.PageableResponse;
 import org.assertj.core.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

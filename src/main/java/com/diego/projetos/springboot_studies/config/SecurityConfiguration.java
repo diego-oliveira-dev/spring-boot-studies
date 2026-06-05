@@ -1,0 +1,56 @@
+package com.diego.projetos.springboot_studies.config;
+
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.Customizer;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.provisioning.InMemoryUserDetailsManager;
+import org.springframework.security.web.SecurityFilterChain;
+
+@Configuration
+//@EnableWebSecurity
+public class SecurityConfiguration {
+    @Bean
+    public SecurityFilterChain filterChain (HttpSecurity http) throws Exception {
+        http.authorizeHttpRequests((authz) -> authz
+                        .anyRequest().authenticated()
+                )
+                .httpBasic(Customizer.withDefaults());
+        return http.build();
+    }
+    // states that any HTTP request must be authenticated
+    // basically it defines the security laws of the application
+
+    @Bean
+    public PasswordEncoder passwordEncoder () {
+        return new BCryptPasswordEncoder();
+        // note: PasswordEncoder -> interface
+        // BCryptPasswordEncoder -> implementation
+    }
+    // everytime its called it generates a random hash associated with a given password
+    // the hash is the one saved into the database for security
+    // after that, to compare that a given login password is in the database, it compares:
+    // the provided password and the value in the database
+    // if they match then the login is authorized
+
+    @Bean
+    public UserDetailsService userDetailsService(PasswordEncoder passwordEncoder) {
+        UserDetails admin = User.withUsername("diego")
+                .password(passwordEncoder.encode("diego123")) // wrap the password inside the encoder
+                .roles("USER", "ADMIN")
+                .build();
+
+        UserDetails user = User.withUsername("user")
+                .password(passwordEncoder.encode("user123"))
+                .roles("USER")
+                .build();
+
+        return new InMemoryUserDetailsManager(user, admin);
+    }
+    // creates new in memory users (created every time that the application starts)
+}

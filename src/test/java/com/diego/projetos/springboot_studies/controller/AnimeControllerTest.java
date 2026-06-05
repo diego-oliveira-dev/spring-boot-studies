@@ -27,11 +27,14 @@ import java.util.List;
 
 //@SpringBootTest -> not ideal for unit tests, since it starts the entire Spring Application
 @ExtendWith(SpringExtension.class)
-// better approach since it only integrates Spring's testing support with JUnit
-// it enables features like:
-// - dependency injection in tests
-// - transaction management in tests
-// - access to application context only when necessary
+    // better approach since it only integrates Spring's testing support with JUnit
+    // it enables features like:
+    // - dependency injection in tests
+    // - transaction management in tests
+    // - access to application context only when necessary
+// @WebMvcTest -> tests only Spring MVC components without loading the entire application
+    // this one is particularly useful because it lets you test the web layer
+    // if you want to make unit tests for Controller layer, it makes more sense to use it because of it
 class AnimeControllerTest {
     @InjectMocks // when you want to test the class itself
     private AnimeController animeController;

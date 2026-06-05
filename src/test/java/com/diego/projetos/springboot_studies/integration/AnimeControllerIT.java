@@ -7,25 +7,29 @@ import com.diego.projetos.springboot_studies.util.AnimeCreator;
 import com.diego.projetos.springboot_studies.util.AnimePostRequestBodyCreator;
 import com.diego.projetos.springboot_studies.wrapper.PageableResponse;
 import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.mockito.ArgumentMatchers;
-import org.mockito.BDDMockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.test.annotation.DirtiesContext;
 
-import java.util.Collections;
 import java.util.List;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@AutoConfigureTestDatabase
+@AutoConfigureTestDatabase // contraty to @DataJpaTest, it doesn't do roll back after each method
+// to work around it, we can use:
+@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
+// this annotation states that each test is considered dirty after execution
+// that way Spring just deletes/drops the entire database after each one of them
 public class AnimeControllerIT {
     @Autowired
     private TestRestTemplate testRestTemplate;
@@ -112,5 +116,32 @@ public class AnimeControllerIT {
         Assertions.assertThat(animeResponseEntity.getStatusCode()).isEqualTo(HttpStatus.CREATED);
         Assertions.assertThat(animeResponseEntity.getBody()).isNotNull();
         Assertions.assertThat(animeResponseEntity.getBody().getId()).isNotNull();
+    }
+
+    @Test
+    @DisplayName("replace updates anime when successful")
+    void replace_UpdatesAnime_WhenSuccessful() {
+        Anime savedAnime = animeRepository.save(AnimeCreator.createAnimeToBeSaved());
+        savedAnime.setName("new name");
+
+        ResponseEntity<Void> animeResponseEntity = testRestTemplate.exchange("/animes",
+                HttpMethod.PUT,
+                new HttpEntity<>(savedAnime),
+                Void.class);
+
+        Assertions.assertThat(animeResponseEntity).isNotNull();
+        Assertions.assertThat(animeResponseEntity.getStatusCode()).isEqualTo(HttpStatus.NO_CONTENT  );
+    }
+
+    @Test
+    @DisplayName("delete removes anime when successful")
+    void delete_RemovesAnime_WhenSuccessful() {
+        Anime savedAnime = animeRepository.save(AnimeCreator.createAnimeToBeSaved());
+
+        ResponseEntity<Void> animeResponseEntity = testRestTemplate.exchange("/animes/{id}",
+                HttpMethod.DELETE, null, Void.class, savedAnime.getId());
+
+        Assertions.assertThat(animeResponseEntity).isNotNull();
+        Assertions.assertThat(animeResponseEntity.getStatusCode()).isEqualTo(HttpStatus.NO_CONTENT);
     }
 }

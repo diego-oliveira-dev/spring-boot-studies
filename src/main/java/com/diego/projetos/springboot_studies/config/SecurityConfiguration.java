@@ -1,6 +1,7 @@
 package com.diego.projetos.springboot_studies.config;
 
 //import com.diego.projetos.springboot_studies.service.ProjectUserDetailsService;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.context.annotation.Bean;
@@ -32,8 +33,7 @@ public class SecurityConfiguration {
      - FilterSecurityInterceptor
 
      Authentication -> Authorization
-
-    ***/
+     ***/
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -41,7 +41,10 @@ public class SecurityConfiguration {
                 // note 1
                 .csrf(AbstractHttpConfigurer::disable) // note 2
                 .authorizeHttpRequests((authz) -> authz
-                        .anyRequest().authenticated())
+                        .requestMatchers("animes/admin/**").hasRole("ADMIN")
+                        .requestMatchers("animes/**").hasRole("USER") // note 4
+                        .anyRequest()
+                        .authenticated())
                 .formLogin(Customizer.withDefaults())
                 .httpBasic(Customizer.withDefaults()); // note 3
 
@@ -62,6 +65,11 @@ public class SecurityConfiguration {
 
     // note 3:
     // Customizer.withDefaults enables HTTP Basic authentication with default Spring Security configuration
+
+    // note 4:
+    // IT HAS TO BE IN THIS ORDER (more restrictive first)
+    // the reason is that if thing1/** is first, thing1/thing2/*** will fit in the first category
+    // because thing/*** is **, so you have to be careful with that
 
     @Bean
     public PasswordEncoder passwordEncoder() {

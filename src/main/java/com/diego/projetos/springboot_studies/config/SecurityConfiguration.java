@@ -15,9 +15,23 @@ import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
-//@EnableWebSecurity
+// @EnableWebSecurity -> optional because Spring Boot already enables it
 @EnableMethodSecurity
 public class SecurityConfiguration {
+    /***
+     Spring Authentication Filters:
+     - BasicAuthenticationFilter
+     - UsernamePasswordAuthenticationFilter
+     - DefaultLoginPageGeneratingFilter
+     - DefaultLogoutPageGeneratingFilter
+     - FilterSecurityInterceptor
+
+     Authentication -> Authorization
+
+    ***/
+
+
+
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
@@ -25,6 +39,7 @@ public class SecurityConfiguration {
                 .csrf(AbstractHttpConfigurer::disable) // note 2
                 .authorizeHttpRequests((authz) -> authz
                         .anyRequest().authenticated())
+                .formLogin(Customizer.withDefaults())
                 .httpBasic(Customizer.withDefaults()); // note 3
 
         return http.build();

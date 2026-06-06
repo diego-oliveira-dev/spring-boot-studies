@@ -1,8 +1,12 @@
 package com.diego.projetos.springboot_studies.config;
 
+//import com.diego.projetos.springboot_studies.service.ProjectUserDetailsService;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.Customizer;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -14,6 +18,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 
+@Log4j2
 @Configuration
 // @EnableWebSecurity -> optional because Spring Boot already enables it
 @EnableMethodSecurity
@@ -29,8 +34,6 @@ public class SecurityConfiguration {
      Authentication -> Authorization
 
     ***/
-
-
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -72,19 +75,23 @@ public class SecurityConfiguration {
     // the provided password and the value in the database
     // if they match then the login is authorized
 
-    @Bean
-    public UserDetailsService userDetailsService(PasswordEncoder passwordEncoder) {
-        UserDetails admin = User.withUsername("diego")
-                .password(passwordEncoder.encode("diego123")) // wraps the password inside the encoder
-                .roles("USER", "ADMIN")
-                .build();
-
-        UserDetails user = User.withUsername("user")
-                .password(passwordEncoder.encode("user123"))
-                .roles("USER")
-                .build();
-
-        return new InMemoryUserDetailsManager(user, admin);
-    }
+//    @Bean
+//    public UserDetailsService userDetailsService(PasswordEncoder passwordEncoder) {
+//        log.info("Password encoded: {}", passwordEncoder.encode("diego123"));
+//        log.info(">>> UserDetailsService criado");
+//
+//        UserDetails admin = User.withUsername("diego")
+//                .password(passwordEncoder.encode("diego123")) // wraps the password inside the encoder
+//                .roles("USER", "ADMIN")
+//                .build();
+//
+//        UserDetails user = User.withUsername("user")
+//                .password(passwordEncoder.encode("user123"))
+//                .roles("USER")
+//                .build();
+//
+//        return new InMemoryUserDetailsManager(user, admin);
+//    }
     // creates new in memory users (created every time that the application starts)
+    // not needed because now users are being created directly into the database
 }

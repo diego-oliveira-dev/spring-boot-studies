@@ -22,5 +22,6 @@ logging:
     console: "%d{yyyy-MM-dd HH:mm:ss.SSS} [%-5level] %logger : %msg%n"
   level:
     org:
+      org.springframework.security: TRACE
       hibernate:
         SQL: DEBUG

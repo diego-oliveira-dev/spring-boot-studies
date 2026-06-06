@@ -3,6 +3,7 @@ package com.diego.projetos.springboot_studies.config;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.Customizer;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.core.userdetails.User;
@@ -12,10 +13,10 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 
 @Configuration
 //@EnableWebSecurity
+@EnableMethodSecurity
 public class SecurityConfiguration {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -32,11 +33,11 @@ public class SecurityConfiguration {
     // basically it defines the security laws of the application
 
     // note 1:
-    // we could generate a CSFR token as showed below, but not going to because it makes testing difficult
-    // in real applications, it's the preferred way though
-    // .csrf(csrf -> csrf.csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse()))
-    // CookieCsrfTokenRepository doesn't create a token, instead it defines:
-    // "if there is a token, it will be stored in a cookie"
+    // we could generate a CSFR token as showed below, but not going to because it makes testing difficult,
+    // although in real applications, it's the preferred way
+    //      .csrf(csrf -> csrf.csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse()))
+    // *obs: CookieCsrfTokenRepository doesn't create a token, instead it defines:
+    //       "if there is a token, it will be stored in a cookie"
 
     // note 2:
     // same as csrf.disable(), but with method reference
@@ -50,9 +51,9 @@ public class SecurityConfiguration {
         // note: PasswordEncoder -> interface
         // BCryptPasswordEncoder -> implementation
     }
-    // everytime its called it generates a random hash associated with a given password
+    // everytime the encoder is called, it generates a random hash associated with a given password
     // the hash is the one saved into the database for security
-    // after that, to compare that a given login password is in the database, it compares:
+    // after that, to compare that a given login password is in the database, it compares
     // the provided password and the value in the database
     // if they match then the login is authorized
 

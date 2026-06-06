@@ -24,7 +24,7 @@ import org.springframework.test.annotation.DirtiesContext;
 import java.util.List;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@AutoConfigureTestDatabase // contraty to @DataJpaTest, it doesn't do roll back after each method
+@AutoConfigureTestDatabase // contrary to @DataJpaTest, it doesn't do roll back after each method
 // to work around it, we can use:
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 // this annotation states that each test is considered dirty after execution
